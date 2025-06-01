@@ -72,7 +72,8 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f4f1ec" />
+    <meta name="theme-color" content="#f4f1ec" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
     <link rel="alternate" type="application/rss+xml" title={`${RSS_PREFIX}${channel?.title}`} href={RSS_URL} />
     <style is:inline>
       @view-transition {

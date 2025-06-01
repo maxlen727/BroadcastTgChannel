@@ -1,7 +1,7 @@
 :root {
   --background-color: #f4f1ec;
   --foreground-color: #000000;
-  --highlight-color: orangered;
+  --highlight-color: purple;
   --box-border-radius: 3px;
   --media-border-radius: 8px;
   --dot-size: 8px;
@@ -19,9 +19,21 @@
   --secondary-color: #999;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #121212;
+    --foreground-color: #ffffff;
+    --border-color: rgba(255, 255, 255, 0.2);
+    --cell-background-color: #1e1e1e;
+    --code-background-color: #2d2d2d;
+    --secondary-color: #bbb;
+  }
+}
+
 body {
   background-color: var(--background-color);
   color: var(--foreground-color);
+  color-scheme: light dark;
   font-family:
     ui-sans-serif,
     system-ui,
