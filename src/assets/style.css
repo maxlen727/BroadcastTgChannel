@@ -1,7 +1,7 @@
 :root {
   --background-color: #f4f1ec;
   --foreground-color: #000000;
-  --highlight-color: orangered;
+  --highlight-color: purple;
   --box-border-radius: 3px;
   --media-border-radius: 8px;
   --dot-size: 8px;
@@ -19,9 +19,30 @@
   --secondary-color: #999;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #181a1b;
+    --foreground-color: #f4f1ec;
+    --border-color: rgba(255, 255, 255, 0.2);
+    --cell-background-color: #222;
+    --code-background-color: #282828;
+    --secondary-color: #bbb;
+  }
+
+  a.site-title:link,
+  a.site-title:visited {
+    color: #eee;
+  }
+
+  a.site-title:hover {
+    color: #fff;
+  }
+}
+
 body {
   background-color: var(--background-color);
   color: var(--foreground-color);
+  color-scheme: light dark;
   font-family:
     ui-sans-serif,
     system-ui,
