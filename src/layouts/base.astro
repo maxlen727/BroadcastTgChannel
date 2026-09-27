@@ -51,6 +51,8 @@ const seoParams = {
 const GOOGLE_SEARCH_SITE = getEnv(import.meta.env, Astro, 'GOOGLE_SEARCH_SITE')
 const searchAction = GOOGLE_SEARCH_SITE ? 'https://www.google.com/search' : '/search/result'
 
+const BACKGROUND_IMAGE = getEnv(import.meta.env, Astro, 'BACKGROUND_IMAGE')
+
 const HEADER_INJECT = getEnv(import.meta.env, Astro, 'HEADER_INJECT')
 const FOOTER_INJECT = getEnv(import.meta.env, Astro, 'FOOTER_INJECT')
 const TAGS = getEnv(import.meta.env, Astro, 'TAGS')
@@ -68,13 +70,21 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
 ---
 
 <!doctype html>
-<html lang={locale ?? 'en'}>
+<html lang={locale ?? 'en'} data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f1ec" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#181a1b" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#27272a" />
     <link rel="alternate" type="application/rss+xml" title={`${RSS_PREFIX}${channel?.title}`} href={RSS_URL} />
+    <script is:inline>
+      ;(() => {
+        const stored = localStorage.getItem('theme')
+        if (stored === 'light' || stored === 'dark') {
+          document.documentElement.dataset.theme = stored
+        }
+      })()
+    </script>
     <style is:inline>
       @view-transition {
         navigation: auto; /* enabled */
@@ -93,81 +103,82 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
   </head>
 
   <body>
-    <div id="wrapper">
-      <div id="container">
-        <div id="main-container">
-          <slot />
+    {
+      BACKGROUND_IMAGE ? (
+        <div id="background" aria-hidden="true">
+          <img id="background-image" src={BACKGROUND_IMAGE} alt="" />
+          <div class="background-overlay" />
         </div>
-        <div id="aside-container">
-          <slot name="aside">
-            <div class="nav">
-              <div class="nav-item">
-                <a href={SITE_URL} title={channel?.title} class={`nav-link ${pathname === '/' ? 'current' : ''}`}>
-                  Home
-                </a>
-              </div>
-              {
-                TAGS ? (
-                  <div class="nav-item">
-                    <a
-                      href={`${SITE_URL}tags`}
-                      title="Tags"
-                      class={`nav-link ${pathname === '/tags' ? 'current' : ''}`}
-                    >
-                      Tags
-                    </a>
-                  </div>
-                ) : null
-              }
-              {
-                LINKS ? (
-                  <div class="nav-item">
-                    <a
-                      href={`${SITE_URL}links`}
-                      title="Links"
-                      class={`nav-link ${pathname === '/links' ? 'current' : ''}`}
-                    >
-                      Links
-                    </a>
-                  </div>
-                ) : null
-              }
-              {
-                navs.map((nav) => (
-                  <div class="nav-item">
-                    <a href={nav.href} title={nav.title} target="_blank" rel="noopener" class="nav-link">
-                      {nav.title}
-                    </a>
-                  </div>
-                ))
-              }
-            </div>
-            <input class="search-icon" name="icon" type="checkbox" placeholder="Search" />
-            <form class="search-form" action={searchAction} method="get">
-              {GOOGLE_SEARCH_SITE ? <input type="hidden" name="as_sitesearch" value={GOOGLE_SEARCH_SITE} /> : null}
-              <input type="text" name="q" placeholder="Search" />
-            </form>
-            <div class="copyright-wrap">
-              Powered by
-              <a
-                href="https://github.com/ccbikai/BroadcastChannel"
-                title="BroadcastChannel"
-                target="_blank"
-                rel="noopener"
-              >
-                BroadcastChannel
-              </a> &
-              <a href="https://github.com/Planetable/SiteTemplateSepia" title="Sepia" target="_blank" rel="noopener">
-                Sepia
+      ) : null
+    }
+    <header id="site-header">
+      <div class="header-inner">
+        <a href={SITE_URL} title={channel?.title} class={`brand ${pathname === '/' ? 'current' : ''}`}>
+          {channel?.title}
+        </a>
+        <nav class="nav">
+          {
+            TAGS ? (
+              <a href={`${SITE_URL}tags`} title="Tags" class={`nav-link ${pathname === '/tags' ? 'current' : ''}`}>
+                Tags
               </a>
-            </div>
-          </slot>
+            ) : null
+          }
+          {
+            LINKS ? (
+              <a href={`${SITE_URL}links`} title="Links" class={`nav-link ${pathname === '/links' ? 'current' : ''}`}>
+                Links
+              </a>
+            ) : null
+          }
+          {
+            navs.map((nav) => (
+              <a href={nav.href} title={nav.title} target="_blank" rel="noopener" class="nav-link">
+                {nav.title}
+              </a>
+            ))
+          }
+        </nav>
+        <div class="header-actions">
+          <input class="search-icon" name="icon" type="checkbox" placeholder="Search" />
+          <form class="search-form" action={searchAction} method="get">
+            {GOOGLE_SEARCH_SITE ? <input type="hidden" name="as_sitesearch" value={GOOGLE_SEARCH_SITE} /> : null}
+            <input type="text" name="q" placeholder="Search" />
+          </form>
+          <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme" title="切换主题">
+            <span class="icon-dark">🌙</span>
+            <span class="icon-light">☀️</span>
+          </button>
         </div>
       </div>
-    </div>
-    <a href="#wrapper" id="back-to-top" aria-label="Back to top">
+    </header>
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <footer id="site-footer">
+      <div class="copyright-wrap">
+        Powered by
+        <a href="https://github.com/ccbikai/BroadcastChannel" title="BroadcastChannel" target="_blank" rel="noopener">
+          BroadcastChannel
+        </a>
+      </div>
+    </footer>
+
+    <a href="#main-content" id="back-to-top" aria-label="Back to top">
       <img {...backToTopIcon} alt="Back to Top" />
     </a>
     <Fragment set:html={FOOTER_INJECT} />
+    <script is:inline>
+      ;(() => {
+        const toggle = document.getElementById('theme-toggle')
+        toggle?.addEventListener('click', () => {
+          const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
+          document.documentElement.dataset.theme = next
+          localStorage.setItem('theme', next)
+        })
+      })()
+    </script>
   </body>
 </html>

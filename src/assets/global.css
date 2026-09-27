@@ -15,42 +15,37 @@ html {
   transition: 0.2s ease;
 }
 
-#aside-container {
-  position: sticky;
-  top: 0;
-}
-
-#aside-container .nav {
-  position: static;
-  top: unset;
-}
-
 .search-icon {
-  position: absolute;
-  top: 20px;
-  right: 0px;
-  width: 24px;
-  height: 24px;
+  position: relative;
+  width: 32px;
+  height: 32px;
   padding: 4px;
   appearance: none;
   outline: none;
+  cursor: pointer;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease-in-out;
+
+  &:hover {
+    background-color: var(--code-background-color);
+  }
 
   &:after {
     content: '🔍';
     width: 100%;
     height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: var(--background-color);
+    font-size: 15px;
+    line-height: 1;
     text-align: center;
     vertical-align: middle;
-    line-height: 24px;
   }
 }
 
-.search-icon:checked + .search-form {
-  display: block !important;
+.search-icon:checked {
+  background-color: var(--code-background-color);
 }
 
 .search-form {
@@ -59,46 +54,43 @@ html {
   color: var(--secondary-color);
   padding: 8px;
   border-radius: var(--box-border-radius);
+  border: 1px solid var(--border-color);
 
   > input {
-    border: 1px solid var(--background-color);
+    border: 1px solid var(--border-color);
     border-radius: var(--box-border-radius);
-    background: var(--code-background-color);
-    color: var(--secondary-color);
+    background: var(--background-color);
+    color: var(--foreground-color);
     outline: none;
-    font-size: 12px;
-    line-height: 2.4;
+    font-size: 14px;
+    line-height: 2;
     padding: 0 0.5em;
     box-sizing: border-box;
-    width: 100%;
+    width: 160px;
   }
 }
 
-.copyright-wrap {
-  color: #666;
-  line-height: 1.5;
-  font-size: 14px;
-  display: none;
-  padding: 8px;
+.search-icon:checked + .search-form {
+  display: block !important;
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 200;
+  box-shadow: var(--shadows);
 }
 
 @media screen and (min-width: 600px) {
-  #aside-container {
-    height: 100vh;
-    height: 100svh;
-    overflow-y: auto;
-  }
-
   .search-form {
     display: block;
+    position: static;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    padding: 0;
   }
 
   .search-icon {
     display: none;
-  }
-
-  .copyright-wrap {
-    display: block;
   }
 }
 

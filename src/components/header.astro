@@ -108,22 +108,7 @@ const staticProxy = getEnv(import.meta.env, Astro, 'STATIC_PROXY') ?? '/static/'
 }
 
 <style>
-  #site-intro {
-    color: var(--secondary-color);
-    background-color: var(--code-background-color);
-    word-break: break-word;
-
-    & :global(.emoji) {
-      font-style: normal;
-      margin-right: 2px;
-    }
-  }
-
-  .social-icon {
-    padding: 4px;
-  }
-
   .header-icons {
-    gap: 2px;
+    gap: 4px;
   }
 </style>
